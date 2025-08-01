@@ -161,7 +161,7 @@ from ultralytics import YOLO
 
 # 🚀 Setup Streamlit UI
 st.set_page_config(page_title="Data Collection India", layout="wide")
-st.title("🧠 Data Collection India | Interview Assessment")
+st.title("Data Collection India | Interview Assessment")
 
 # 📁 Sidebar config
 with st.sidebar:
@@ -297,8 +297,8 @@ if input_file is not None:
             if not ret:
                 break
 
-            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            results = model.track(frame, conf=conf_thresh, iou=iou_thresh, persist=True)
+            # rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            results = model.track(conf=conf_thresh, iou=iou_thresh, persist=True) #frame, 
             annotated_frame = results[0].plot()
 
             with stframe1:
@@ -308,4 +308,4 @@ if input_file is not None:
 
         cap.release()
 else:
-    st.warning("👆 Please upload an input file to begin inference.")
+    st.warning("Please upload an input file to begin inference.")
