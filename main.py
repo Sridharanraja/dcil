@@ -113,14 +113,22 @@ if st.session_state.show_report:
         #         mime="application/pdf"
         #     )
         # PDF download option
-        if st.button("📥 Download Report as PDF"):
-            with open("./Report/Training_Report_DCIL.pdf", "rb") as file:
-                st.download_button(
-                    label="⬇️ Click to Download PDF",
-                    data=file.read(),
-                    file_name="./Report/Training_Report_DCIL.pdf",
-                    mime="application/pdf"
-                )
+        with open("./Report/Training_Report_DCIL.pdf", "rb") as file:
+            st.download_button(
+                label="📥 Download Report as PDF",
+                data=file.read(),
+                file_name="./Report/Training_Report_DCIL.pdf",
+                mime="application/pdf"
+            )
+
+        # if st.button("📥 Download Report as PDF"):
+        #     with open("./Report/Training_Report_DCIL.pdf", "rb") as file:
+        #         st.download_button(
+        #             label="⬇️ Click to Download PDF",
+        #             data=file.read(),
+        #             file_name="./Report/Training_Report_DCIL.pdf",
+        #             mime="application/pdf"
+        #         )
 
 
 # Main content
