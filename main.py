@@ -143,7 +143,7 @@ if input_file is not None:
             results = model.track(frame, conf=conf_thresh, iou=iou_thresh, persist=True)
             annotated_frame = results[0].plot()
 
-            stframe.image(annotated_frame, channels="RGB", use_column_width=True)
+            stframe.image(annotated_frame, use_column_width=True) # channels="RGB", 
 
         cap.release()
 else:
