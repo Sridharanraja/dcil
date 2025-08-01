@@ -59,4 +59,3 @@ Performs reliably across various sizes and lighting. Cluttered background is the
 
 #### **Conclusion:**
 High precision, low latency YOLOv11m model suitable for real-time object detection.
-"""
