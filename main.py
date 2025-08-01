@@ -109,7 +109,7 @@ if st.session_state.show_report:
             st.download_button(
                 label="Download PDF",
                 data=pdf_output.getvalue(),
-                file_name="YOLOv11_Training_Report_DCIL.pdf",
+                file_name="./Report/Training_Report_DCIL.pdf",
                 mime="application/pdf"
             )
 
