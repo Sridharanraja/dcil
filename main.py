@@ -297,8 +297,8 @@ if input_file is not None:
             if not ret:
                 break
 
-            # rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            results = model.track(conf=conf_thresh, iou=iou_thresh, persist=True) #frame, 
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            results = model.track(frame, conf=conf_thresh, iou=iou_thresh, persist=True) 
             annotated_frame = results[0].plot()
 
             with stframe1:
