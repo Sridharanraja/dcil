@@ -12,7 +12,8 @@ st.title("Data Collection India | Interview Assessment")
 # Sidebar configuration
 with st.sidebar:
     st.header("Upload & Configure")
-    model_file = st.file_uploader("Upload YOLOv11 .pt Model", type=["pt"])
+    # model_file = st.file_uploader("Upload YOLOv11 .pt Model", type=["pt"])
+    model_file = "./weight/best.pt"
     data_type = st.radio("Choose Input Type", ["Image", "Video"])
     conf_thresh = st.slider("Confidence Threshold", 0.1, 1.0, 0.5, 0.05)
 
@@ -105,38 +106,38 @@ if st.session_state.show_report:
             )
 
 
-# # Main content
-# st.subheader("🔍 Model Inference Preview")
-# if input_file is not None:
-#     if data_type == "Image":
-#         img = Image.open(input_file)
-#         st.image(img, caption="Uploaded Image", use_column_width=True)
-#         st.info("Inference logic not yet added. Model will run here once integrated.")
-#     else:
-#         st.video(input_file)
-#         st.info("Video inference support coming soon.")
-# else:
-#     st.warning("Please upload a model and an input file to proceed.")
-
-
 # Main content
 st.subheader("🔍 Model Inference Preview")
-if input_file is not None and model_file is not None:
-    with open("temp_model.pt", "wb") as f:
-        f.write(model_file.read())
-    model = YOLO("temp_model.pt")
-
+if input_file is not None:
     if data_type == "Image":
         img = Image.open(input_file)
-        img_path = "temp_input.jpg"
-        img.save(img_path)
-
-        results = model(img_path, conf=conf_thresh)
-        res_plotted = results[0].plot()
-        st.image(res_plotted, caption="Detection Result", use_column_width=True)
-
-    elif data_type == "Video":
+        st.image(img, caption="Uploaded Image", use_column_width=True)
+        st.info("Inference logic not yet added. Model will run here once integrated.")
+    else:
         st.video(input_file)
         st.info("Video inference support coming soon.")
 else:
     st.warning("Please upload a model and an input file to proceed.")
+
+
+# # Main content
+# st.subheader("🔍 Model Inference Preview")
+# if input_file is not None and model_file is not None:
+#     with open("temp_model.pt", "wb") as f:
+#         f.write(model_file.read())
+#     model = YOLO("temp_model.pt")
+
+#     if data_type == "Image":
+#         img = Image.open(input_file)
+#         img_path = "temp_input.jpg"
+#         img.save(img_path)
+
+#         results = model(img_path, conf=conf_thresh)
+#         res_plotted = results[0].plot()
+#         st.image(res_plotted, caption="Detection Result", use_column_width=True)
+
+#     elif data_type == "Video":
+#         st.video(input_file)
+#         st.info("Video inference support coming soon.")
+# else:
+#     st.warning("Please upload a model and an input file to proceed.")
