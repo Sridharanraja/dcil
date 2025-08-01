@@ -5,3 +5,4 @@ torch>=2.0
 ultralytics>=8.0.198
 opencv-python-headless>=4.9.0.80
 seaborn
+lap
