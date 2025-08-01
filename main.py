@@ -96,23 +96,6 @@ High precision, low latency YOLOv11m model suitable for real-time object detecti
 if st.session_state.show_report:
     with st.expander("Model Training Report", expanded=True):
         st.markdown(report_text)
-
-        # PDF download option
-        # if st.button("📥 Download Report as PDF"):
-        #     pdf = FPDF()
-        #     pdf.add_page()
-        #     pdf.set_font("Arial", size=12)
-        #     for line in report_text.split('\n'):
-        #         pdf.multi_cell(0, 10, line)
-        #     pdf_output = BytesIO()
-        #     pdf.output(pdf_output)
-        #     st.download_button(
-        #         label="Download PDF",
-        #         data=pdf_output.getvalue(),
-        #         file_name="./Report/Training_Report_DCIL.pdf",
-        #         mime="application/pdf"
-        #     )
-        # PDF download option
         with open("./Report/Training_Report_DCIL.pdf", "rb") as file:
             st.download_button(
                 label="📥 Download Report as PDF",
@@ -121,24 +104,38 @@ if st.session_state.show_report:
                 mime="application/pdf"
             )
 
-        # if st.button("📥 Download Report as PDF"):
-        #     with open("./Report/Training_Report_DCIL.pdf", "rb") as file:
-        #         st.download_button(
-        #             label="⬇️ Click to Download PDF",
-        #             data=file.read(),
-        #             file_name="./Report/Training_Report_DCIL.pdf",
-        #             mime="application/pdf"
-        #         )
+
+# # Main content
+# st.subheader("🔍 Model Inference Preview")
+# if input_file is not None:
+#     if data_type == "Image":
+#         img = Image.open(input_file)
+#         st.image(img, caption="Uploaded Image", use_column_width=True)
+#         st.info("Inference logic not yet added. Model will run here once integrated.")
+#     else:
+#         st.video(input_file)
+#         st.info("Video inference support coming soon.")
+# else:
+#     st.warning("Please upload a model and an input file to proceed.")
 
 
 # Main content
 st.subheader("🔍 Model Inference Preview")
-if input_file is not None:
+if input_file is not None and model_file is not None:
+    with open("temp_model.pt", "wb") as f:
+        f.write(model_file.read())
+    model = YOLO("temp_model.pt")
+
     if data_type == "Image":
         img = Image.open(input_file)
-        st.image(img, caption="Uploaded Image", use_column_width=True)
-        st.info("Inference logic not yet added. Model will run here once integrated.")
-    else:
+        img_path = "temp_input.jpg"
+        img.save(img_path)
+
+        results = model(img_path, conf=conf_thresh)
+        res_plotted = results[0].plot()
+        st.image(res_plotted, caption="Detection Result", use_column_width=True)
+
+    elif data_type == "Video":
         st.video(input_file)
         st.info("Video inference support coming soon.")
 else:
