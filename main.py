@@ -98,20 +98,30 @@ if st.session_state.show_report:
         st.markdown(report_text)
 
         # PDF download option
+        # if st.button("📥 Download Report as PDF"):
+        #     pdf = FPDF()
+        #     pdf.add_page()
+        #     pdf.set_font("Arial", size=12)
+        #     for line in report_text.split('\n'):
+        #         pdf.multi_cell(0, 10, line)
+        #     pdf_output = BytesIO()
+        #     pdf.output(pdf_output)
+        #     st.download_button(
+        #         label="Download PDF",
+        #         data=pdf_output.getvalue(),
+        #         file_name="./Report/Training_Report_DCIL.pdf",
+        #         mime="application/pdf"
+        #     )
+        # PDF download option
         if st.button("📥 Download Report as PDF"):
-            pdf = FPDF()
-            pdf.add_page()
-            pdf.set_font("Arial", size=12)
-            for line in report_text.split('\n'):
-                pdf.multi_cell(0, 10, line)
-            pdf_output = BytesIO()
-            pdf.output(pdf_output)
-            st.download_button(
-                label="Download PDF",
-                data=pdf_output.getvalue(),
-                file_name="./Report/Training_Report_DCIL.pdf",
-                mime="application/pdf"
-            )
+            with open("./Report/Training_Report_DCIL.pdf", "rb") as file:
+                st.download_button(
+                    label="⬇️ Click to Download PDF",
+                    data=file.read(),
+                    file_name="./Report/Training_Report_DCIL.pdf",
+                    mime="application/pdf"
+                )
+
 
 # Main content
 st.subheader("🔍 Model Inference Preview")
