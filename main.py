@@ -146,7 +146,7 @@ if st.session_state.show_report:
             st.warning("⚠️ Report PDF not found in ./Report directory.")
 
 # 🔍 Inference preview
-st.subheader("🔍 Model Inference Preview")
+st.subheader("Model Inference Preview")
 
 if input_file is not None:
     if data_type == "Image":
@@ -158,9 +158,9 @@ if input_file is not None:
 
         col1, col2 = st.columns(2)
         with col1:
-            st.image(img_np, caption="📸 Original Image", use_column_width=True)
+            st.image(img_np, caption="Original Image", use_column_width=True)
         with col2:
-            st.image(annotated_img, caption="🎯 Detected Image", use_column_width=True)
+            st.image(annotated_img, caption="Detected Image", use_column_width=True)
 
     else:
         temp_file = tempfile.NamedTemporaryFile(delete=False)
@@ -187,9 +187,9 @@ if input_file is not None:
             annotated_frame = results[0].plot()
 
             with stframe1:
-                st.image(rgb_frame, caption="🎮 Original Frame", use_column_width=True)
+                st.image(rgb_frame, caption="Original Frame", use_column_width=True)
             with stframe2:
-                st.image(annotated_frame, caption="🔍 Tracked Output", use_column_width=True)
+                st.image(annotated_frame, caption="Tracked Output", use_column_width=True)
 
         cap.release()
 else:
