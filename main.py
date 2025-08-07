@@ -17,7 +17,7 @@ with st.sidebar:
     data_type = st.radio("Choose Input Type", ["Image", "Video"])
     conf_thresh = st.slider("Confidence Threshold", 0.1, 1.0, 0.5, 0.05)
     iou_thresh = st.slider("IoU Threshold (Video Tracking)", 0.1, 1.0, 0.5, 0.05)
-    tracker_type = st.selectbox("Tracker Type", ["bytetrack.yaml", "botsort.yaml"])
+    tracker_type = st.selectbox("Select Tracker", ["bytetrack.yaml", "botsort.yaml"])
 
     input_file = st.file_uploader(
         f"Upload {'Image' if data_type == 'Image' else 'Video'}",
@@ -107,7 +107,7 @@ if st.session_state.show_report:
         try:
             with open("./Report/Training_Report_DCIL.pdf", "rb") as file:
                 st.download_button(
-                    label="📅 Download Report as PDF",
+                    label="📥 Download Report as PDF",
                     data=file.read(),
                     file_name="Training_Report_DCIL.pdf",
                     mime="application/pdf"
@@ -145,7 +145,6 @@ if input_file is not None:
             if not ret:
                 break
 
-            # Track using BGR frame
             results = model.track(
                 frame,
                 conf=conf_thresh,
@@ -154,27 +153,27 @@ if input_file is not None:
                 persist=True
             )
 
-            # Annotate manually to preserve color fidelity
-            annotator = Annotator(frame.copy())
-            for box in results[0].boxes:
-                b = box.xyxy[0].int().tolist()
-                c = int(box.cls[0])
-                annotator.box_label(b, model.names[c])
+            annotator = Annotator(frame, line_width=2)
+            for r in results:
+                boxes = r.boxes
+                for box in boxes:
+                    b = box.xyxy[0].cpu().numpy().astype(int)
+                    cls = int(box.cls[0])
+                    track_id = int(box.id[0]) if box.id is not None else None
+                    label = f"{model.names[cls]} {track_id}" if track_id is not None else model.names[cls]
+                    annotator.box_label(b, label)
 
             annotated_frame = annotator.result()
 
-            # Convert both to RGB for correct Streamlit rendering
-            original_display = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            annotated_display = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
-
             with stframe1:
-                st.image(original_display, caption="🎮 Original Frame", use_column_width=True)
+                st.image(frame, caption="🎞️ Original Frame", use_column_width=True)
             with stframe2:
-                st.image(annotated_display, caption="🔍 Tracked Output", use_column_width=True)
+                st.image(annotated_frame, caption="🔍 Tracked Output", use_column_width=True)
 
         cap.release()
 else:
     st.warning("Please upload an input file to begin inference.")
+
 
 
 
