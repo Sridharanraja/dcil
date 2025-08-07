@@ -166,10 +166,20 @@ if input_file is not None:
 
             annotated_frame = results[0].plot()
 
+            # Convert both frames to RGB for display (to avoid color mismatch in Streamlit)
+            rgb_original = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            rgb_annotated = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
+            
             with stframe1:
-                st.image(rgb_frame, caption="🎞️ Original Frame", use_column_width=True)
+                st.image(rgb_original, caption="🎞️ Original Frame", use_column_width=True)
+            
             with stframe2:
-                st.image(annotated_frame, caption="🔍 Tracked Output", use_column_width=True)
+                st.image(rgb_annotated, caption="🔍 Tracked Output", use_column_width=True)                                                                    
+
+            # with stframe1:
+            #     st.image(rgb_frame, caption="🎞️ Original Frame", use_column_width=True)
+            # with stframe2:
+            #     st.image(annotated_frame, caption="🔍 Tracked Output", use_column_width=True)
 
         cap.release()
 else:
