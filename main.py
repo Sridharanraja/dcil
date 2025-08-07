@@ -354,7 +354,7 @@ if input_file is not None:
             annotated_frame = results[0].plot()
         
             # Convert only original frame from BGR to RGB for display
-            original_display = cv2.cvtColor(frame), cv2.COLOR_BGR2RGB)
+            original_display = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         
             # Show side-by-side
             with stframe1:
