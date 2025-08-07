@@ -149,13 +149,27 @@ if input_file is not None:
         cap = cv2.VideoCapture(video_path)
         stframe1, stframe2 = st.columns(2)
 
+        # while cap.isOpened():
+        #     ret, frame = cap.read()
+        #     if not ret:
+        #         break
+
+        #     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        #     # results = model.track(frame, conf=conf_thresh, iou=iou_thresh, persist=True)
+        #     results = model.track(
+        #         frame,
+        #         conf=conf_thresh,
+        #         iou=iou_thresh,
+        #         tracker=tracker_path,
+        #         persist=True
+        #     )
+
         while cap.isOpened():
             ret, frame = cap.read()
             if not ret:
                 break
-
-            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            # results = model.track(frame, conf=conf_thresh, iou=iou_thresh, persist=True)
+        
+            # Pass BGR frame directly to YOLO model
             results = model.track(
                 frame,
                 conf=conf_thresh,
@@ -163,6 +177,20 @@ if input_file is not None:
                 tracker=tracker_path,
                 persist=True
             )
+        
+            # Plot returns RGB
+            annotated_frame = results[0].plot()
+        
+            # Convert only original frame from BGR to RGB for display
+            original_display = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        
+            # Show side-by-side
+            with stframe1:
+                st.image(original_display, caption="🎞️ Original Frame", use_column_width=True)
+        
+            with stframe2:
+                st.image(annotated_frame, caption="🔍 Tracked Output", use_column_width=True)
+
 
 
             # YOLOv11 already returns RGB output from .plot()
