@@ -17,7 +17,16 @@ with st.sidebar:
     conf_thresh = st.slider("Confidence Threshold", 0.1, 1.0, 0.5, 0.05)
     # iou_thresh = st.slider("IoU Threshold (Video Tracking)", 0.1, 1.0, 0.5, 0.05)
     iou_thresh = st.slider("IoU Threshold (Video Tracking)", 0.1, 1.0, 0.5, 0.05)
-    tracker_type = st.selectbox("Select Tracker Type", ["bytetrack", "botsort"], index=0)
+
+    tracker_choice = st.selectbox("Select Tracker Type", ["ByteTrack", "BoT-SORT"], index=0)
+
+    # Convert selection to YAML path
+    tracker_yaml_map = {
+        "ByteTrack": "cfg/trackers/bytetrack.yaml",
+        "BoT-SORT": "cfg/trackers/botsort.yaml"
+    }
+    tracker_path = tracker_yaml_map[tracker_choice]
+    
 
     input_file = st.file_uploader(
         f"Upload {'Image' if data_type == 'Image' else 'Video'}",
@@ -151,9 +160,10 @@ if input_file is not None:
                 frame,
                 conf=conf_thresh,
                 iou=iou_thresh,
-                tracker=tracker_type,
+                tracker=tracker_path,
                 persist=True
             )
+
             annotated_frame = results[0].plot()
 
             with stframe1:
