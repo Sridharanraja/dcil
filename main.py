@@ -169,7 +169,7 @@
 
 #-------object tracking-----------
 
-@st.cache_data.clear()
+#st.cache_data.clear()
 import streamlit as st
 from PIL import Image
 import numpy as np
