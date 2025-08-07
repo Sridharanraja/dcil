@@ -17,16 +17,9 @@ with st.sidebar:
     model_file = "./weight/best.pt"
     data_type = st.radio("Choose Input Type", ["Image", "Video"])
     conf_thresh = st.slider("Confidence Threshold", 0.1, 1.0, 0.5, 0.05)
+    # iou_thresh = st.slider("IoU Threshold (Video Tracking)", 0.1, 1.0, 0.5, 0.05)
     iou_thresh = st.slider("IoU Threshold (Video Tracking)", 0.1, 1.0, 0.5, 0.05)
-
-    tracker_choice = st.selectbox("Select Tracker Type", ["ByteTrack", "BoT-SORT"], index=0)
-
-    # Convert selection to YAML path
-    tracker_yaml_map = {
-        "ByteTrack": "cfg/trackers/bytetrack.yaml",
-        "BoT-SORT": "cfg/trackers/botsort.yaml"
-    }
-    tracker_path = tracker_yaml_map[tracker_choice]
+    tracker_type = st.selectbox("Select Tracker Type", ["bytetrack", "botsort"], index=0)
 
     input_file = st.file_uploader(
         f"Upload {'Image' if data_type == 'Image' else 'Video'}",
@@ -154,22 +147,19 @@ if input_file is not None:
             if not ret:
                 break
 
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            # results = model.track(frame, conf=conf_thresh, iou=iou_thresh, persist=True)
             results = model.track(
                 frame,
                 conf=conf_thresh,
                 iou=iou_thresh,
-                tracker=tracker_path,
+                tracker=tracker_type,
                 persist=True
             )
-
-            # Annotated frame is already in RGB
             annotated_frame = results[0].plot()
 
-            # Convert original to RGB for display
-            original_display = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
             with stframe1:
-                st.image(original_display, caption="🎞️ Original Frame", use_column_width=True)
+                st.image(rgb_frame, caption="🎞️ Original Frame", use_column_width=True)
             with stframe2:
                 st.image(annotated_frame, caption="🔍 Tracked Output", use_column_width=True)
 
