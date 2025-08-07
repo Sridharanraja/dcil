@@ -164,17 +164,19 @@ if input_file is not None:
                 persist=True
             )
 
-            annotated_frame = results[0].plot()
 
-            # Convert both frames to RGB for display (to avoid color mismatch in Streamlit)
-            rgb_original = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            rgb_annotated = cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB)
+            # YOLOv11 already returns RGB output from .plot()
+            annotated_frame = results[0].plot()
             
+            # Convert ONLY the original frame to RGB for display
+            rgb_original = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    
+            # Display both side-by-side
             with stframe1:
                 st.image(rgb_original, caption="🎞️ Original Frame", use_column_width=True)
             
             with stframe2:
-                st.image(rgb_annotated, caption="🔍 Tracked Output", use_column_width=True)                                                                    
+                st.image(annotated_frame, caption="🔍 Tracked Output", use_column_width=True)                                                                 
 
             # with stframe1:
             #     st.image(rgb_frame, caption="🎞️ Original Frame", use_column_width=True)
